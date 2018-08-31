@@ -1,0 +1,19 @@
+hook=/usr/lib/initcpio/hooks/plymouth
+
+pre_install () {
+  cp "${hook}" "${hook}.pre-tty7"
+}
+
+post_install () {
+  sed -i 's:/usr/bin/plymouthd:/usr/bin/plymouthd --tty=/dev/tty7:' "${hook}"
+}
+
+post_upgrade () {
+  post_remove
+  post_install
+}
+
+post_remove () {
+  mv "${hook}.pre-tty7" "${hook}"
+}
+
